@@ -66,6 +66,8 @@ router.put('/:id', (req, res) => {
     // updated combines params for created & looking up data
     // sql version = UPDATE users SET username = "", email = "", password = "" WHERE id = 1;
     User.update(req.body, {
+        //following line req for update password hash to function
+        individualHooks: true,
         where: {
             id: req.params.id
         }
