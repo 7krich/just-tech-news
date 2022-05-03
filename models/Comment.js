@@ -16,7 +16,10 @@ Comment.init(
         // define a comment text column
         comment_text: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: [1]
+            }
         },
         // define user_id column
         user_id: {
