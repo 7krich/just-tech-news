@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { User } = require('../../models');
 
-// GET /api/users
+// GET all users (/api/users)
 router.get('/', (req, res) => {
     // access User model & run .findAll() method to read all users
     // much like SELECT * FROM users;
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// GET /api/users/1
+// GET sing user (/api/users/1)
 router.get('/:id', (req, res) => {
     // access User model & find read singular id
     // much like SELECT * FROM users WHERE id = 1;

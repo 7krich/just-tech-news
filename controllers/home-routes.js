@@ -3,6 +3,7 @@ const res = require('express/lib/response');
 const sequelize = require('../config/connection');
 const { Post, User, Comment } = require('../models');
 
+// get all posts for homepage
 router.get('/', (req, res) => {
     console.log(req.session);
     Post.findAll({
