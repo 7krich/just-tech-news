@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const withAuth = require('../utils/auth');
 const { User } = require('../../models');
 
 // GET /api/users
@@ -65,7 +66,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST /api/users
-router.post('/', (req, res) => {
+router.post('/', withAuth, (req, res) => {
     // expects {username: 'Kyle', email: '7krich@gmail.com', password: 'password123'}
     // created acts much like INSERT INTO users (username, email, password) VALUES ("","","");
     User.create({
@@ -85,7 +86,7 @@ router.post('/', (req, res) => {
 });
 
 // route to verify user identity
-router.post('/login', (req, res) => {
+router.post('/login', withAuth, (req, res) => {
     // query User table to find the instance of a user that contains the user's credentials - user's email
     // expects {email: "", password: ""}
     User.findOne({
@@ -121,7 +122,7 @@ router.post('/login', (req, res) => {
 });
 
 // PUT /api/users/1
-router.put('/:id', (req, res) => {
+router.put('/:id', withAuth, (req, res) => {
     // expects {username: 'Kyle', email: '7krich@gmail.com', password: 'password123'}
     // if req.body has exact key/value pairs to match the model, we can use just req.body instead
     // updated combines params for created & looking up data
@@ -147,7 +148,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE /api/users/1
-router.delete('/:id', (req, res) => {
+router.delete('/:id', withAuth, (req, res) => {
     User.destroy({
         where: {
             id: req.params.id
@@ -167,7 +168,7 @@ router.delete('/:id', (req, res) => {
 });
 
 // allow user to log out if signed in
-router.post('/logout', (req, res) => {
+router.post('/logout', withAuth, (req, res) => {
     if (req.session.loggedIn) {
         req.session.destroy(() => {
             res.status(204).end();
