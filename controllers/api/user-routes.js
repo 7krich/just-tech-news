@@ -1,8 +1,7 @@
 const router = require('express').Router();
-const withAuth = require('../utils/auth');
 const { User } = require('../../models');
 
-// GET /api/users
+// GET all users (/api/users)
 router.get('/', (req, res) => {
     // access User model & run .findAll() method to read all users
     // much like SELECT * FROM users;
@@ -19,7 +18,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// GET /api/users/1
+// GET sing user (/api/users/1)
 router.get('/:id', (req, res) => {
     // access User model & find read singular id
     // much like SELECT * FROM users WHERE id = 1;
@@ -66,7 +65,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST /api/users
-router.post('/', withAuth, (req, res) => {
+router.post('/', (req, res) => {
     // expects {username: 'Kyle', email: '7krich@gmail.com', password: 'password123'}
     // created acts much like INSERT INTO users (username, email, password) VALUES ("","","");
     User.create({
@@ -86,7 +85,7 @@ router.post('/', withAuth, (req, res) => {
 });
 
 // route to verify user identity
-router.post('/login', withAuth, (req, res) => {
+router.post('/login', (req, res) => {
     // query User table to find the instance of a user that contains the user's credentials - user's email
     // expects {email: "", password: ""}
     User.findOne({
@@ -122,7 +121,7 @@ router.post('/login', withAuth, (req, res) => {
 });
 
 // PUT /api/users/1
-router.put('/:id', withAuth, (req, res) => {
+router.put('/:id', (req, res) => {
     // expects {username: 'Kyle', email: '7krich@gmail.com', password: 'password123'}
     // if req.body has exact key/value pairs to match the model, we can use just req.body instead
     // updated combines params for created & looking up data
@@ -148,7 +147,7 @@ router.put('/:id', withAuth, (req, res) => {
 });
 
 // DELETE /api/users/1
-router.delete('/:id', withAuth, (req, res) => {
+router.delete('/:id', (req, res) => {
     User.destroy({
         where: {
             id: req.params.id
@@ -168,7 +167,7 @@ router.delete('/:id', withAuth, (req, res) => {
 });
 
 // allow user to log out if signed in
-router.post('/logout', withAuth, (req, res) => {
+router.post('/logout', (req, res) => {
     if (req.session.loggedIn) {
         req.session.destroy(() => {
             res.status(204).end();

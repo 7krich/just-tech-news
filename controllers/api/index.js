@@ -1,5 +1,4 @@
 // collect & package all API routes
-
 const router = require('express').Router();
 
 const userRoutes = require('./user-routes.js');

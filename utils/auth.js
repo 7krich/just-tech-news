@@ -5,7 +5,7 @@ const withAuth = (req, res, next) => {
         //direct user to login
         res.redirect('/login');
     } else {
-        // else keep moving
+        // else call next middleware function
         next();
     }
 };
