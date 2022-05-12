@@ -104,7 +104,7 @@ router.put('/upvote', (req, res) => {
           res.status(500).json(err);
         });
     }
-  });
+});
 
 // update post
 router.put('/:id', (req, res) => {
