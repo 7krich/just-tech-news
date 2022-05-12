@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { User } = require('../../models');
 
-// GET /api/users
+// GET all users (/api/users)
 router.get('/', (req, res) => {
     // access User model & run .findAll() method to read all users
     // much like SELECT * FROM users;
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// GET /api/users/1
+// GET sing user (/api/users/1)
 router.get('/:id', (req, res) => {
     // access User model & find read singular id
     // much like SELECT * FROM users WHERE id = 1;
@@ -73,10 +73,14 @@ router.post('/', (req, res) => {
         email: req.body.email,
         password: req.body.password
     })
-    .then(dbUserData => res.json(dbUserData))
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+    .then(dbUserData => {
+        req.session.save(() => {
+            req.session.user_id = dbUserData.id;
+            req.session.username = dbUserData.username;
+            req.session.loggedIn = true;
+
+            res.json(dbUserData);
+        });
     });
 });
 
@@ -104,12 +108,17 @@ router.post('/login', (req, res) => {
             res.status(400).json({ mesage: 'Incorrect password!' });
             return;
         }
-        // if true
-        res.json({ user: dbUserData, message: 'You are now logged in!' });
-    })
 
-    
-})
+        req.session.save(() => {
+            // declare session variables
+            req.session.user_id = dbUserData.id;
+            req.session.username = dbUserData.username;
+            req.session.loggedIn = true;
+        
+        res.json({ user: dbUserData, message: 'You are now logged in!' });
+        });
+    });
+});
 
 // PUT /api/users/1
 router.put('/:id', (req, res) => {
@@ -156,5 +165,17 @@ router.delete('/:id', (req, res) => {
         res.status(500).json(err);
     });
 });
+
+// allow user to log out if signed in
+router.post('/logout', (req, res) => {
+    if (req.session.loggedIn) {
+        req.session.destroy(() => {
+            res.status(204).end();
+        });
+    }
+    else {
+        res.status(404).end();
+    }
+})
 
 module.exports = router;
