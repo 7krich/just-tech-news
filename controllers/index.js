@@ -1,14 +1,9 @@
-// collect packaged group of API endpoints & prefix them wtih api path
 const router = require('express').Router();
+
+const apiRoutes = require('./api/');
 const homeRoutes = require('./home-routes.js');
 
-const apiRoutes = require('./api');
-
-router.use('/api', apiRoutes);
 router.use('/', homeRoutes);
-
-router.use((req, res) => {
-  res.status(404).end();
-});
+router.use('/api', apiRoutes);
 
 module.exports = router;
