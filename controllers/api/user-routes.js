@@ -64,7 +64,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
-// POST /api/users
+// POST (create) /api/users
 router.post('/', (req, res) => {
     // expects {username: 'Kyle', email: '7krich@gmail.com', password: 'password123'}
     // created acts much like INSERT INTO users (username, email, password) VALUES ("","","");
